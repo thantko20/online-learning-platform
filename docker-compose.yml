@@ -10,6 +10,8 @@ services:
       POSTGRES_DB: db
     ports:
       - 5432:5432
+    volumes:
+      - ./postgresdb:/var/lib/postgresql/data:rw
 
   adminer:
     image: adminer
