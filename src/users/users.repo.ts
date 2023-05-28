@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UsersRepo {
   constructor(private readonly prisma: PrismaService) {}
 
-  findAll(where: Prisma.UserWhereInput) {
+  findAll(where: Prisma.UserWhereInput = {}) {
     return this.prisma.user.findMany({ where });
   }
 
@@ -14,7 +14,7 @@ export class UsersRepo {
     return this.prisma.user.findUnique({ where });
   }
 
-  findOneBy(where: Prisma.UserWhereInput) {
+  findOneBy(where: Prisma.UserWhereInput = {}) {
     return this.prisma.user.findFirst({ where });
   }
 
