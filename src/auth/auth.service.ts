@@ -4,6 +4,7 @@ import { UsersService } from 'src/users/users.service';
 import { PasswordService } from './password.service';
 import { RegisterUserDto } from './schemas/register-user.schema';
 import { UtilsService } from 'src/utils/utils.service';
+import { LoginUserDto } from './schemas/login-user.schema';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,7 @@ export class AuthService {
     private readonly utilsService: UtilsService,
   ) {}
 
-  async signIn(email: string, password: string) {
+  async login({ email, password }: LoginUserDto) {
     const user = await this.usersService.getUserByEmail(email);
 
     if (!user) {
@@ -34,12 +35,13 @@ export class AuthService {
 
     return {
       accessToken: await this.jwtService.signAsync(payload),
+      user: this.utilsService.excludeFields(user, ['password']),
     };
   }
 
   async register(registerUserDto: RegisterUserDto) {
     const user = await this.usersService.createUser(registerUserDto);
 
-    return this.utilsService.excludeFields(user, ['password']);
+    return user;
   }
 }
