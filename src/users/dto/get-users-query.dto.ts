@@ -1,14 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class GetUsersQueryDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  name: string;
+  name?: string;
 
-  @ApiProperty()
-  @IsEmail()
+  @ApiPropertyOptional()
   @IsOptional()
-  email: string;
+  @IsEmail()
+  email?: string;
 }

@@ -13,7 +13,6 @@ async function bootstrap() {
     .setDescription('Mdemy API')
     .setVersion('0.1')
     .addBearerAuth()
-    .setBasePath('api')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
