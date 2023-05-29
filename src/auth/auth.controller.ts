@@ -1,11 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ZodValidationPipe } from 'src/common/zod-validation.pipe';
-import {
-  RegisterUserDto,
-  registerUserSchema,
-} from './schemas/register-user.schema';
-import { LoginUserDto, loginUserSchema } from './schemas/login-user.schema';
+import { RegisterUserDto } from './dtos/register-user.dto';
+import { LoginUserDto } from './dtos/login-user.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,7 +10,7 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @Post('/register')
   async registerUser(
-    @Body(new ZodValidationPipe(registerUserSchema))
+    @Body()
     registerUserDto: RegisterUserDto,
   ) {
     await this.authService.register(registerUserDto);
@@ -23,9 +19,7 @@ export class AuthController {
   }
 
   @Post('/login')
-  async loginUser(
-    @Body(new ZodValidationPipe(loginUserSchema)) loginUserDto: LoginUserDto,
-  ) {
+  async loginUser(@Body() loginUserDto: LoginUserDto) {
     const result = await this.authService.login(loginUserDto);
 
     return result;
