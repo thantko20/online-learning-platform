@@ -1,17 +1,16 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { GetUsersQuery, getUsersQuerySchema } from './schemas/get-users.schema';
-import { ZodValidationPipe } from 'src/common/zod-validation.pipe';
 import { Public } from 'src/common/decorators/public.decorator';
+import { ApiTags } from '@nestjs/swagger';
+import { GetUsersQueryDto } from './dto/get-users-query.dto';
 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  getAllUsers(
-    @Query(new ZodValidationPipe(getUsersQuerySchema)) query: GetUsersQuery,
-  ) {
+  getAllUsers(@Query() query: GetUsersQueryDto) {
     return this.usersService.getAllUsers(query);
   }
 
