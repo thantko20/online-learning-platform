@@ -11,12 +11,14 @@ import { UsersService } from 'src/users/users.service';
 import { JwtPayload } from './types/jwt-payload';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from 'src/common/decorators/public.decorator';
+import { UtilsService } from 'src/utils/utils.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
+    private readonly utilsService: UtilsService,
     private readonly reflector: Reflector,
   ) {}
 
@@ -42,7 +44,11 @@ export class AuthGuard implements CanActivate {
 
       const user = await this.usersService.getUserByEmail(payload.email);
 
-      request['user'] = user;
+      if (!user) {
+        throw new Error();
+      }
+
+      request['user'] = this.utilsService.excludeFields(user, ['password']);
     } catch {
       throw new UnauthorizedException();
     }

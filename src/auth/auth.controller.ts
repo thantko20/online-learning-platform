@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -20,6 +21,7 @@ export class AuthController {
     return;
   }
 
+  @Public()
   @Post('/login')
   async loginUser(@Body() loginUserDto: LoginUserDto) {
     const result = await this.authService.login(loginUserDto);
