@@ -1,0 +1,23 @@
+name: online-learning-platform
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+      - run: npm ci
+      - name: Linting
+        run: npm run lint
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+  #   needs: lint
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       run: npm ci
+  #     - name: Production Migration
+  #       run: npm run migrate:deploy
