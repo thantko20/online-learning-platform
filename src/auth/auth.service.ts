@@ -40,6 +40,14 @@ export class AuthService {
   }
 
   async register(registerUserDto: RegisterUserDto) {
+    const existingUser = await this.usersService.getUserByEmail(
+      registerUserDto.email,
+    );
+
+    if (existingUser) {
+      throw new BadRequestException();
+    }
+
     const encryptedPassword = await this.passwordService.encryptPassword(
       registerUserDto.password,
     );

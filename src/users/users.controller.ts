@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseUUIDPipe, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Public } from 'src/common/decorators/public.decorator';
 import { ApiTags } from '@nestjs/swagger';
@@ -16,7 +16,7 @@ export class UsersController {
 
   @Public()
   @Get(':id')
-  getUserById(@Param('id') id: string) {
+  getUserById(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.getUserById(id);
   }
 }
