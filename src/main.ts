@@ -2,9 +2,27 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { createLogger, format, transports } from 'winston';
+import { WinstonModule, utilities as nestWinstonUtilies } from 'nest-winston';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const loggerInstance = createLogger({
+    transports: [
+      new transports.Console({
+        format: format.combine(
+          format.timestamp(),
+          format.ms(),
+          nestWinstonUtilies.format.nestLike('APP'),
+        ),
+      }),
+    ],
+  });
+
+  const app = await NestFactory.create(AppModule, {
+    logger: WinstonModule.createLogger({
+      instance: loggerInstance,
+    }),
+  });
 
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
