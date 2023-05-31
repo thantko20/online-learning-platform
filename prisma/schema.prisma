@@ -15,4 +15,60 @@ model User {
   name String
   email String @unique
   password String
+  courses Course[]
+  user_course UserCourse[]
+}
+
+model Course {
+  id String @id @default(uuid())
+  title String
+  description String
+  price Decimal
+  instructor_id String
+
+  instructor User @relation(fields: [instructor_id], references: [id])
+  user_course UserCourse[]
+  sections Section[]
+}
+
+model UserCourse {
+  id String @id @default(uuid())
+  course_id String
+  user_id String
+
+  course Course @relation(fields: [course_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
+  sections SectionProgress[]
+
+  @@unique([course_id, user_id])
+}
+
+model Section {
+  id String @id @default(uuid())
+  title String
+  section_order Int
+  course_id String
+
+  course Course @relation(fields: [course_id], references: [id])
+  lessons Lesson[]
+  section_progresses SectionProgress[]
+}
+
+model Lesson {
+  id String @id @default(uuid())
+  title String
+  lesson_order Int
+  section_id String
+  section Section @relation(fields: [section_id], references: [id])
+}
+
+model SectionProgress {
+  id String @id @default(uuid())
+  is_completed Boolean
+  section_id String
+  user_course_id String
+
+  section Section @relation(fields: [section_id], references: [id])
+  user_course UserCourse @relation(fields: [user_course_id], references: [id])
 }
